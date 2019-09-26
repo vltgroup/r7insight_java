@@ -90,6 +90,8 @@ public class LogentriesClient {
         } else {
             socket = new Socket();
             socket.setSendBufferSize(100);
+            socket.setKeepAlive(true);
+            socket.setTcpNoDelay(true);
             socket.connect(new InetSocketAddress(getAddress(), getPort()), 30000);
         }
 
@@ -97,6 +99,9 @@ public class LogentriesClient {
     }
 
     public void write(byte[] buffer, int offset, int length) throws IOException {
+        Socket socket = new Socket();
+        socket.connect(new InetSocketAddress(getAddress(), getPort()), 30000);
+        socket.close();
         if (this.stream == null) {
             throw new IOException();
         }
