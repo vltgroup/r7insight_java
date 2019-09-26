@@ -5,6 +5,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.InetSocketAddress;
 
 import static com.rapid7.Constants.HTTP_ENDPOINT_TEMPLATE;
 import static com.rapid7.Constants.DATA_ENDPOINT_TEMPLATE;
@@ -87,7 +88,9 @@ public class LogentriesClient {
                 socket = SSLSocketFactory.getDefault().createSocket(getAddress(), getPort());
             }
         } else {
-            socket = new Socket(getAddress(), getPort());
+            socket = new Socket();
+            socket.setSendBufferSize(100);
+            socket.connect(new InetSocketAddress(getAddress(), getPort()), 30000);
         }
 
         this.stream = socket.getOutputStream();
